@@ -31,23 +31,97 @@ A Blank Document opens up into which the following source code can be typed down
 (Note : File name should be with HDL Extension)
 
 ## a)To Verify the Functionality using Test Bench
-
 ## Source Code – Using Case Statement :
-
-(Include program here)
-
-Use Save option or Ctrl+S to save the code or click on the save option from the top most right corner and close the text file.
+````module alu_32bit_case(y,a,b,f);
+input [31:0]a;
+input [31:0]b;
+input [2:0]f;
+output reg [31:0]y;
+always@(*)
+begin
+case(f)
+3'b000:y=a&b;         //AND Operation
+3'b001:y=a|b;           //OR Operation
+3'b010:y=~(a&b);       //NAND Operation
+3'b011:y=~(a|b);      //NOR Operation
+3'b010:y=a+b;        //Addition
+3'b011:y=a-b;       //Subtraction
+3'b100:y=a*b;      //Multiply
+default:y=32'bx;
+endcase
+end
+endmodule
+````
 
 ## Creating Test bench:
 
 Similarly, create your test bench using gedit <filename_tb>.v or <filename_tb>.vhdl to open a new blank document (alu_32bit_tb_case).
 
 ## Test Bench :
+````
+module alu_32bit_tb_case;
+reg [31:0]a;
+reg [31:0]b;
+reg [2:0]f;
+wire [31:0]y;
+alu_32bit_case test2(.y(y),.a(a),.b(b),.f(f));
+initial
+begin
+a=32'h00000000;
+b=32'hFFFFFFFF;
+#10 f=3'b000;
+#10 f=3'b001;
+#10 f=3'b010;
+#10 f=3'b100;
+end
+initial
+#50 $finish;
+endmodule
+````
+# Source Code - Using If Statement :
 
-(Include test bench program here)
-
-Use Save option or Ctrl+S to save the code or click on the save option from the top most right corner and close the text file.
-
+````module alu_32bit_if(y,a,b,f);
+input [31:0]a;
+input [31:0]b;
+input [2:0]f;
+output reg [31:0]y;
+always@(*)
+begin
+if(f==3'b000)
+y=a&b; //AND Operation
+else if (f==3'b001)
+y=a|b; //OR Operation
+else if (f==3'b010)
+y=a+b; //Addition
+else if (f==3'b011)
+y=a-b; //Subtraction
+else if (f==3'b100)
+y=a*b; //Multiply
+else
+y=32'bx;
+end
+endmodule
+````
+# Test bench :
+````module alu_32bit_tb_if;
+reg [31:0]a;
+reg [31:0]b;
+reg [2:0]f;
+wire [31:0]y;
+alu_32bit_if test(.y(y),.a(a),.b(b),.f(f));
+initial
+begin
+a=32'h00000000;
+b=32'hFFFFFFFF;
+#10 f=3'b000;
+#10 f=3'b001;
+#10 f=3'b010;
+#10 f=3'b100;
+end
+initial
+#50 $finish;
+endmodule
+````
 ## Functional Simulation: 
 
 Invoke the cadence environment by type the below commands 
